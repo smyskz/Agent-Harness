@@ -8,13 +8,14 @@
 
 | File | Status | 対象と動作 |
 |---|---|---|
+| [`review-architecture-baseline.md`](review-architecture-baseline.md) | original | `arch/`正本を整合性監査し、推奨案と選択肢を1問ずつ確認して更新し、最後にbaseline承認を求める |
 | [`archive-old-ai-reports.md`](archive-old-ai-reports.md) | original | 締切月より前の報告書を`reports/AI/YYYY-MM/`へ整理する月単位の原本 |
 | [`archive-old-ai-reports-update.md`](archive-old-ai-reports-update.md) | unverified update candidate | 締切日以前の報告書を`reports/AI/YYYY/MM/DD/`へ整理する日単位の改善候補 |
 
 `-update`は採択済みを意味しない。原本と同じ条件で比較検証し、明確な改善が確認された場合だけ
 候補を採択する。未検証、同点、悪化の場合は原本を維持する。
 
-## 共通の安全条件
+## Report archival commandの安全条件
 
 - 移動前に候補、移動先、日付根拠、Git管理状態、path衝突を提示する。
 - 利用者の承認前にfileを移動しない。
