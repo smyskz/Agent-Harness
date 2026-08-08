@@ -164,7 +164,7 @@ action itemには、完了条件が明確で、1人または1 agentが担当で�
 
 ## AI Agent作業の記憶
 
-`docs/2607.26637v1.pdf`のfilesystem-based memoryの考え方を採用する。作業を行う
+`docs/paper/FS-MEMORY-for-LLM-Agent-2607.26637v1.pdf`のfilesystem-based memoryの考え方を採用する。作業を行う
 execution、結果を記憶へ統合するmanagement、必要な記憶を探すsearchを概念上
 分離する。同じagentが三役を担っても、検索中は原則read-only、作業後に管理する。
 作業完了前に更新要否を必ず判定し、再利用できる新しい知識は完了報告前に`memory/`へ統合する。
@@ -271,7 +271,7 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
 ## Skill・Command文書の改善
 
 `skill/`、`skills/`、`command/`、`commands/`という名前のdirectory以下にある
-既存のMarkdownを改善する場合は、`docs/2605.23904v2.pdf`のSkillOptを参考に、
+既存のMarkdownを改善する場合は、`docs/paper/SKILLOPT-2605.23904v2.pdf`のSkillOptを参考に、
 原本と改善候補を分離する。この規則は参照用クローン内の同名directoryには
 適用せず、参照用クローンは引き続きread-onlyとして扱う。
 
