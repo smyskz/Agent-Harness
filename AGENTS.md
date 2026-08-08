@@ -25,9 +25,13 @@
 ## リポジトリ構成
 
 - `README.md`: リポジトリの概要と報告書の索引。
+- `arch/`: Git管理するソフトウェア開発文書の正本。要求、設計、ADR、テスト方針、
+  traceabilityなど、人間と生成AIが実装判断を共有するための現在有効な情報を置く。
 - `docs/`: Git管理外のlocal参考資料。原文のscopeと限界を保ち、明示的な依頼なしに変更しない。
 - `reports/AI/`: Git管理する日本語の調査報告書。原則として成果物はここへ
   Markdown形式で保存する。
+- `data/`: Git管理外のlocal data。PDF、TXT、metadata、READMEなど、file種別や内容を
+  問わず`data/`以下をルートGitへ追加しない。ignore例外やforce addを行わない。
 - `memory/`: Git管理外のAI Agent作業の長期記憶。再利用可能な手順、判断、教訓、観察をMarkdownで保存する。
 - `continue/`, `codex/`, `claude-code/`, `cline/`, `opencode/`: 調査用に取得した
   upstreamのローカルクローン。ルートの`.gitignore`で除外され、各directoryは
@@ -42,7 +46,8 @@
 
 1. 現在地とGit rootを確認する。
 2. `git status --short`で、既存の変更と今回の対象を区別する。
-3. `README.md`、対象に近い既存報告書、近接する指示ファイルを読む。
+3. `README.md`、存在する場合は`arch/README.md`と対象に関係する開発文書、対象に
+   近い既存報告書、近接する指示ファイルを読む。
 4. 外部検索や新規取得の前に、ローカルクローンと既存資料に必要な証拠が
    ないか確認する。
 5. 今回の作業に関連する`memory/`の名前と説明を調べ、必要なentryだけを読む。
@@ -50,6 +55,112 @@
 
 既存の未コミット変更は利用者の作業として扱う。依頼と無関係な修正、整形、
 削除、復元、stage解除を行わない。
+
+## ソフトウェア開発文書
+
+人間と生成AIが同じ要求、制約、設計判断、完了条件に基づいてソースコードを
+開発できるよう、現在有効なソフトウェア開発情報は`arch/`以下を正本として管理する。
+`reports/AI/`は調査結果や検討過程を説明する成果物であり、採択後の要求や設計を
+`arch/`の代わりにしない。Issue、会話、作業logだけを唯一の根拠にしない。
+
+### 推奨構成
+
+- `arch/README.md`: 開発文書の索引、各文書のstatus、読む順序、対象systemと
+  repository内実装の対応を示す入口。
+- `arch/sow/SOW.md`: 目的、背景、stakeholder、scope、非scope、成果物、制約、
+  前提、成功条件を定める作業範囲の正本。
+- `arch/management/DEVELOPMENT-PLAN.md`: 開発方針、phase、milestone、dependency、
+  現在のaction itemを一体で管理する開発計画の正本。
+- `arch/srs/SRS.md`: `REQ-`と`NFR-`の安定したIDを持つ機能要件、非機能要件、
+  優先度、根拠、受入条件を定める要求の正本。
+- `arch/design/DESIGN.md`: system context、componentの責務と境界、data/control flow、
+  interface、data model、failure handling、security boundary、deployment、要求との
+  対応を記述する現在設計の正本。
+- `arch/adr/ADR-NNN-<descriptive-name>.md`: 重要なarchitecture判断ごとに、status、
+  context、決定、検討した選択肢、採否理由、影響を残す。採択済みADRは上書きや
+  削除をせず、新しいADRでsupersedeする。
+- `arch/testing/TEST-STRATEGY.md`: unit、integration、system、acceptance、regression、
+  performance、securityなど必要なtest level、test oracle、環境、fixture、quality gate、
+  実行責任を定める。
+- `arch/testing/TEST-PLAN.md`: 大きな機能またはreleaseで個別計画が必要な場合に、
+  対象、除外、test case、環境、entry/exit条件、証拠の保存先を定める。
+- `arch/verification/TRACEABILITY.md`: 要求IDから、設計箇所、ADR、実装path、test、
+  検証証拠までを双方向に追跡できる対応表。
+- `arch/glossary/GLOSSARY.md`: domain用語、略語、同義語、避ける表現を定義する。
+- `arch/security/THREAT-MODEL.md`: credential、個人情報、外部入力、network、権限境界を
+  扱う場合に、asset、trust boundary、threat、mitigation、残存riskを記述する。
+- `arch/operations/RUNBOOK.md`: deploymentまたは継続運用するsystemで、設定、監視、
+  backup、復旧、rollback、incident対応を記述する。
+
+対象に不要な文書やdirectoryを空の雛形として一括作成しない。最小限として
+`arch/README.md`、SOW、Development Plan、SRS、Design、Test Strategy、Traceabilityを
+対象scopeに合わせて用意し、重要判断が生じた時点でADRを追加する。securityと
+operationsは該当するriskまたは運用責任がある場合に追加する。
+
+### 開発計画とaction item
+
+小規模から中規模の開発では、計画、milestone、action itemを
+`arch/management/DEVELOPMENT-PLAN.md`の1ファイルへまとめる。情報を一覧して
+依存関係と次の行動を判断しやすく、複数文書間のstatusずれを避けられるため、
+これを既定とする。少なくとも次を含める。
+
+- 開発目標、非目標、計画上の前提と制約。
+- phaseまたはworkstream、その順序、dependency、並行実行できる範囲。
+- `MS-NNN`形式の安定したIDを持つmilestone。各行に成果、scope、deliverable、
+  dependency、exit criteria、責任者、statusを記載する。target dateは人間が合意した
+  場合だけ記載し、未確定の日付を生成AIが推測しない。
+- `ACT-NNN`形式の安定したIDを持つ現在のaction item。各行に対応するmilestoneと
+  要求ID、具体的な次の行動、責任者、優先度、status、blocker、Issueまたは成果物への
+  linkを記載する。
+- milestone達成を妨げるrisk、外部dependency、pending decisionと、そのowner。
+- 完了したmilestoneのexit criteria、test結果、承認または成果物へのlink。
+
+action itemには、完了条件が明確で、1人または1 agentが担当できる次の行動を書く。
+曖昧な目標、会話log、細かな実行履歴を蓄積しない。Issue trackerがある場合は、
+詳細な作業内容と日々のstatusはIssueを正本とし、Development Planにはmilestoneとの
+対応、優先度、dependency、要約statusだけを同期する。同じtask説明を二重管理しない。
+
+次のいずれかが継続的に発生した場合だけ分割を検討する。
+
+- 独立した複数workstreamが異なる責任者とcadenceで更新される。
+- action itemの更新頻度が高く、計画やmilestoneのreviewと競合する。
+- 完了済みmilestoneやaction itemが増え、現在の計画を一読できない。
+- access権、承認手順、利用toolの違いにより同一fileで管理できない。
+
+分割する場合は、`DEVELOPMENT-PLAN.md`を全体方針、phase、dependency、分割文書の
+索引として維持し、`arch/management/MILESTONES.md`へmilestone、
+`arch/management/ACTION-ITEMS.md`へ現在のaction itemを移す。IDを変更せず、
+`arch/README.md`と相互linkを更新し、同じ項目を複数fileへ複製しない。
+
+### 文書の状態と責任
+
+- 各文書には少なくともtitle、`draft | review | approved | superseded`のstatus、
+  更新日、責任者または承認者を記載する。既存形式がある場合はそれを優先する。
+- 生成AIは文書を調査、起草、更新できるが、人間の確認なしに`approved`へ変更しない。
+  scope、受入条件、公開interface、data migration、security boundary、重大なarchitecture
+  判断は人間の承認対象とする。
+- 未決事項は`TBD`、仮定は`Assumption`、外部判断待ちは`Pending decision`として明示し、
+  推測で要求や設計を確定しない。実装を左右する未決事項は着手前に利用者へ確認する。
+- SRSとDesignには現在有効な状態を記載する。経緯と却下理由はADR、計画とmilestoneは
+  Development Plan、詳細な作業単位と日々の進捗はIssue tracker、調査過程は報告書へ
+  分離し、同じ情報の正本を複数作らない。
+
+### 開発時の更新手順
+
+1. 実装前に`arch/README.md`から関係するSOW、Development Plan、SRS、Design、ADR、
+   Test Strategy、Traceabilityを読み、対象milestone、action item、要求ID、受入条件を
+   特定する。
+2. 要求を変更する場合は、コードより先または同じ変更単位でSRSの要求・受入条件を
+   更新し、影響するDesign、Test Plan、Traceabilityも更新する。
+3. component境界、public interface、永続data、dependency方針、security boundaryなどの
+   重要判断を変更する場合はADRを作成またはsupersedeし、Designへ現在の結論を反映する。
+4. 実装とtestを要求IDへ対応付ける。要求を満たすtestがない場合は追加し、追加できない
+   理由がある場合はTraceabilityへgapとriskを記録する。
+5. 実装中に文書とcodeの矛盾を見つけた場合は、都合のよい方を暗黙に採用しない。
+   差異、影響、提案を示して人間へ確認し、決定後に正本と実装を同じ変更で整合させる。
+6. 完了時は要求、設計、実装、test、証拠のlinkを検査し、文書更新を受入条件の一部として
+   扱う。exit criteriaと検証証拠を満たしたaction itemとmilestoneだけを完了にする。
+   実行していないtestや未承認の判断を完了済みと記録しない。
 
 ## AI Agent作業の記憶
 
@@ -213,6 +324,12 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
 - `git diff --check`が空白errorを報告しない。
 - 追加・変更したMarkdownの相対linkが実在する。
 - READMEの報告書一覧と`reports/AI/`の実ファイルに漏れや削除済みlinkがない。
+- software要件または設計に影響する変更では、`arch/`の正本とcodeが一致し、要求ID、
+  Design、ADR、test、検証証拠の対応に欠落や重複がない。
+- Development Planのmilestone、action item、要求ID、Issue、成果物のlinkとstatusが
+  一致し、完了項目にはexit criteriaを満たす証拠がある。
+- `arch/`を作成または変更した場合は、`arch/README.md`の索引、文書status、
+  supersede関係が実ファイルと一致する。
 - 日付、version、commit、製品名、path、commandが根拠と一致する。
 - codeや設定を変更した場合は、そのdirectoryの公式なformat、lint、testを実行する。
 - 検証できなかった項目は、未実施の理由とともに報告する。
