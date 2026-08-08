@@ -4,3 +4,11 @@ codex/
 continue/
 opencode/
 
+GPQA/
+
+docs/
+minutes/
+memory/
+
+.DS_store
+
