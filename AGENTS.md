@@ -6,11 +6,7 @@
 `AGENTS.md` または各ツール固有の指示ファイルがある場合は、その範囲では
 より近い指示を優先する。
 
-本リポジトリは、AIコーディング環境とエージェント基盤について、実装、
-公開ドキュメント、運用、安全性を調査し、日本語の再利用可能な報告書として
-残すためのリポジトリである。
-
-## ツール間の互換性
+## AGETNS.md のツール間の互換性
 
 - 指示はOpenCode、Codex、Claude Codeのいずれでも解釈できる、通常の
   Markdownと具体的な自然言語で記述する。
@@ -28,7 +24,7 @@
 - `arch/`: Git管理するソフトウェア開発文書の正本。要求、設計、ADR、テスト方針、
   traceabilityなど、人間と生成AIが実装判断を共有するための現在有効な情報を置く。
 - `docs/`: Git管理外のlocal参考資料。原文のscopeと限界を保ち、明示的な依頼なしに変更しない。
-- `reports/AI/`: Git管理する日本語の調査報告書。原則として成果物はここへ
+- `reports/AI/`: Git管理する日本語の報告書。調査結果、活動内容を成果物として、原則ここへ
   Markdown形式で保存する。
 - `data/`: Git管理外のlocal data。PDF、TXT、metadata、READMEなど、file種別や内容を
   問わず`data/`以下をルートGitへ追加しない。ignore例外やforce addを行わない。
@@ -36,7 +32,7 @@
 - `continue/`, `codex/`, `claude-code/`, `cline/`, `opencode/`: 調査用に取得した
   upstreamのローカルクローン。ルートの`.gitignore`で除外され、各directoryは
   独立したGit repositoryである。
-- `samples/`: 設定例などの配置候補。内容が存在する場合のみ、近接する指示を確認して扱う。
+- commands/: ユーザ向けのスキルを記述したMarkdownを保存。
 
 現在の構成は固定だと仮定しない。作業開始時にルート、Git状態、対象directory、
 既存報告書を確認する。READMEと実際のファイルが食い違う場合は、実在する
@@ -164,9 +160,10 @@ action itemには、完了条件が明確で、1人または1 agentが担当で�
 
 ## AI Agent作業の記憶
 
-`docs/paper/FS-MEMORY-for-LLM-Agent-2607.26637v1.pdf`のfilesystem-based memoryの考え方を採用する。作業を行う
-execution、結果を記憶へ統合するmanagement、必要な記憶を探すsearchを概念上
-分離する。同じagentが三役を担っても、検索中は原則read-only、作業後に管理する。
+`docs/paper/FS-MEMORY-for-LLM-Agent-2607.26637v1.pdf`のfilesystem-based memory をもとに、
+以下の考え方を採用する。
+作業を行うexecution、結果を記憶へ統合するmanagement、必要な記憶を探すsearchを概念上分離する。
+同じagentが三役を担っても、検索中は原則read-only、作業後に管理する。
 作業完了前に更新要否を必ず判定し、再利用できる新しい知識は完了報告前に`memory/`へ統合する。
 
 記憶は`memory/`以下で必要に応じて成長させ、最初から過剰なdirectory構成を作らない。
@@ -244,7 +241,7 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
 - 新規報告書は原則`reports/AI/<topic>.md`に置き、既存命名を変更せず、
   新しい名前には説明的なkebab-caseを使う。
 - 報告書には、内容に応じて次を含める。
-  - 調査日、対象、version、commitまたはtag
+  - 作業日、対象、version、commitまたはtag
   - 先に読める結論をSVGで作成
   - architectureまたは処理の全体像
   - 実装または公式仕様の根拠
@@ -257,6 +254,55 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
 - 調査依頼では、会話上の要約だけで終えず、指定されたMarkdown成果物を
   作成してから完了とする。
 - 報告書を追加、削除、改名した場合は`README.md`の索引とlinkを更新する。
+
+### Milestone完了報告
+
+#### 意図
+
+この報告書の目的は、milestoneが「作業を終えたように見える」ことではなく、合意した
+exit criteriaを満たした事実を第三者が再検証できるようにすることである。同時に、
+実装で得た判断、残存risk、現在状態、次の行動を、人間または別のAI Agentへ安全に
+引き継ぐ。報告書を形式的な進捗一覧や成果の誇張にせず、完了判断と引継ぎに必要な
+情報を優先する。
+
+#### 作成条件と正本との関係
+
+milestoneのexit criteriaを満たした場合は、Development Planで完了にする前に、
+`reports/AI/ms-nnn-<descriptive-topic>.md`へ日本語の作業報告書を作成する。
+報告書は、実施内容の履歴、完了判断、検証証拠、次の作業への引継ぎを残すものであり、
+SRS、Design、ADR、Development Plan、Traceabilityなど`arch/`の正本を置き換えない。
+現在有効な要求や設計を先に`arch/`へ反映し、報告書からそのpathへlinkする。
+
+#### 必須内容
+
+milestone完了報告には、少なくとも次を含める。
+
+- milestone ID、名称、目的、責任者、対象期間、完了日、報告書status。
+- 最重要の成果または判断を一つ選んだexecutive summary。内容に適した独自SVGで
+  成果、根拠、影響を可視化し、複数項目を同じ重みで並べた固定dashboardにしない。
+- 計画scopeと実績scope。追加、除外、延期した内容と、その理由および承認者。
+- deliverableと変更した主要path。source、configuration、data model、public interface、
+  dependency、security、operationsへの影響がある場合は区別して記載する。
+- exit criteriaごとの`Pass | Fail | Deferred`、判断根拠、testまたは成果物へのlink。
+- 完了した`ACT-NNN`、対応する`REQ-`または`NFR-`、Design、ADR、実装path、test、
+  Traceabilityの対応。要求外の変更がある場合は明示する。
+- 実施した検証の環境、version、command、結果、test件数。性能値や費用を報告する
+  場合はbaseline、測定条件、単位、試行回数を併記し、未実施の検証も明示する。
+- milestone中に行った重要判断、人間の承認、計画からのdeviationと、その影響。
+- 未解決のdefect、risk、制約、technical debt、deferred item、再現条件、回避策。
+- 次milestoneへ引き継ぐ状態、最初のaction item、dependency、pending decision。
+- Git provenanceとして開始commit、実装結果を特定するcommit、branch、tag、関連Issue
+  またはPR。報告書と実装を同じcommitへ含める場合は、自己参照する未確定SHAを
+  書かず「この報告書を含むcommit」と記載し、完了報告で確定SHAを示す。存在しない
+  tag、Issue、PR、未作成commitを推測して記載しない。
+
+#### 記述と完了判定
+
+報告書にはrawな会話、chain-of-thought、巨大なlogを転記せず、第三者が完了判断を
+再検証するために必要な事実、理由、linkへ蒸留する。exit criteriaに未達がある場合は
+milestoneを完了扱いにせず、報告書を`partial`または`blocked`として未達項目と再開条件を
+記載する。報告書、README索引、Development Plan、Traceabilityが相互に参照でき、
+完了commitから報告内容を再現できることを確認してから完了とする。
 
 ## 実装・編集の原則
 
@@ -328,6 +374,8 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
   Design、ADR、test、検証証拠の対応に欠落や重複がない。
 - Development Planのmilestone、action item、要求ID、Issue、成果物のlinkとstatusが
   一致し、完了項目にはexit criteriaを満たす証拠がある。
+- 完了したmilestoneには対応する作業報告書があり、exit criteria、検証結果、
+  traceability、未解決事項、Git provenance、次のaction itemが記載されている。
 - `arch/`を作成または変更した場合は、`arch/README.md`の索引、文書status、
   supersede関係が実ファイルと一致する。
 - 日付、version、commit、製品名、path、commandが根拠と一致する。
