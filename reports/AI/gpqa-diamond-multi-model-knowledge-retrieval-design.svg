@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">GPQA Diamond 複数モデル・固定知識比較基盤の設計要約</title>
+  <desc id="desc">固定した問題、選択肢順、教科書コーパス、検索結果を使い、モデルAPI、検索条件、採点統計を分離する設計を示す。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071522"/>
+      <stop offset="1" stop-color="#10283b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#41d7b7"/>
+      <stop offset="1" stop-color="#58a6ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#70c7ff"/>
+    </marker>
+    <style>
+      .jp { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; }
+      .title { font-size: 38px; font-weight: 700; fill: #f4f8fb; }
+      .subtitle { font-size: 19px; fill: #b9ccda; }
+      .card-title { font-size: 23px; font-weight: 700; fill: #f4f8fb; }
+      .body { font-size: 17px; fill: #d9e5ec; }
+      .small { font-size: 15px; fill: #aac0cf; }
+      .chip { font-size: 15px; font-weight: 700; fill: #06251f; }
+      .metric { font-size: 18px; font-weight: 700; fill: #8fe8d6; }
+    </style>
+  </defs>
+
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <circle cx="1300" cy="80" r="260" fill="#1d668d" opacity="0.15"/>
+  <circle cx="80" cy="840" r="300" fill="#178c73" opacity="0.12"/>
+
+  <g class="jp">
+    <text x="72" y="78" class="title">GPQA Diamond 比較基盤：変えるものと固定するものを分離する</text>
+    <text x="72" y="116" class="subtitle">モデルの能力差と、教科書知識・検索方式による改善を paired experiment で測定</text>
+    <rect x="72" y="142" width="1296" height="6" rx="3" fill="url(#accent)"/>
+
+    <g filter="url(#shadow)">
+      <rect x="72" y="190" width="382" height="286" rx="20" fill="#122f43" stroke="#2b5972"/>
+      <rect x="529" y="190" width="382" height="286" rx="20" fill="#122f43" stroke="#2b5972"/>
+      <rect x="986" y="190" width="382" height="286" rx="20" fill="#122f43" stroke="#2b5972"/>
+    </g>
+
+    <rect x="96" y="214" width="98" height="30" rx="15" fill="#43d7b8"/>
+    <text x="115" y="235" class="chip">FIXED</text>
+    <text x="96" y="282" class="card-title">実験契約を固定</text>
+    <text x="96" y="322" class="body">• Diamond 198件と dataset hash</text>
+    <text x="96" y="354" class="body">• 選択肢の permutation manifest</text>
+    <text x="96" y="386" class="body">• prompt / corpus / index version</text>
+    <text x="96" y="418" class="body">• temperature・出力上限・seed</text>
+    <text x="96" y="450" class="small">同一条件を全モデルへ供給する</text>
+
+    <rect x="553" y="214" width="118" height="30" rx="15" fill="#58a6ff"/>
+    <text x="572" y="235" class="chip">VARY ONE</text>
+    <text x="553" y="282" class="card-title">比較軸を一つずつ変更</text>
+    <text x="553" y="322" class="body">A. closed-book</text>
+    <text x="553" y="354" class="body">B. 同一 static prefix</text>
+    <text x="553" y="386" class="body">C. 固定 corpus + BM25</text>
+    <text x="553" y="418" class="body">D. 固定 corpus + hybrid search</text>
+    <text x="553" y="450" class="small">Web検索は時変のため別トラック</text>
+
+    <rect x="1010" y="214" width="112" height="30" rx="15" fill="#ffd166"/>
+    <text x="1028" y="235" class="chip">MEASURE</text>
+    <text x="1010" y="282" class="card-title">正解率だけで終わらない</text>
+    <text x="1010" y="322" class="body">• paired accuracy delta + 95% CI</text>
+    <text x="1010" y="354" class="body">• McNemar / paired bootstrap</text>
+    <text x="1010" y="386" class="body">• parse失敗・refusal・API error</text>
+    <text x="1010" y="418" class="body">• token・費用・latency・検索trace</text>
+    <text x="1010" y="450" class="small">「どの条件で良いか」を報告する</text>
+
+    <path d="M454 333 L517 333" stroke="#70c7ff" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M911 333 L974 333" stroke="#70c7ff" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="72" y="528" width="1296" height="276" rx="22" fill="#0d2232" stroke="#28536a"/>
+    <text x="102" y="572" class="card-title">実行パイプライン</text>
+
+    <g>
+      <rect x="102" y="616" width="190" height="100" rx="16" fill="#173a4d" stroke="#3d7088"/>
+      <text x="125" y="652" class="body">Run Manifest</text>
+      <text x="125" y="680" class="small">dataset / seed</text>
+      <text x="125" y="704" class="small">prompt / models</text>
+
+      <rect x="350" y="616" width="210" height="100" rx="16" fill="#173a4d" stroke="#3d7088"/>
+      <text x="373" y="652" class="body">Knowledge Provider</text>
+      <text x="373" y="680" class="small">none / static</text>
+      <text x="373" y="704" class="small">BM25 / hybrid</text>
+
+      <rect x="618" y="616" width="210" height="100" rx="16" fill="#173a4d" stroke="#3d7088"/>
+      <text x="641" y="652" class="body">Prompt Builder</text>
+      <text x="641" y="680" class="small">token budget</text>
+      <text x="641" y="704" class="small">source boundary</text>
+
+      <rect x="886" y="616" width="210" height="100" rx="16" fill="#173a4d" stroke="#3d7088"/>
+      <text x="909" y="652" class="body">Model Adapter</text>
+      <text x="909" y="680" class="small">OpenAI / Claude</text>
+      <text x="909" y="704" class="small">Gemini / compatible</text>
+
+      <rect x="1154" y="616" width="184" height="100" rx="16" fill="#173a4d" stroke="#3d7088"/>
+      <text x="1177" y="652" class="body">Score &amp; Report</text>
+      <text x="1177" y="680" class="small">all 198 denominator</text>
+      <text x="1177" y="704" class="small">paired statistics</text>
+    </g>
+
+    <path d="M292 666 L338 666" stroke="#70c7ff" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M560 666 L606 666" stroke="#70c7ff" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M828 666 L874 666" stroke="#70c7ff" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M1096 666 L1142 666" stroke="#70c7ff" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <text x="102" y="764" class="metric">核心：検索 context は事前生成・固定し、同じ context を全モデルへ渡す</text>
+    <text x="72" y="856" class="small">設計段階 — 実装前に API 対象、教科書利用権、予算、最終評価 protocol を人間レビューで確定する</text>
+  </g>
+</svg>

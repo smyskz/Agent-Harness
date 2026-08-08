@@ -32,6 +32,7 @@
 
 | 報告書 | 概要 |
 |---|---|
+| [GPQA Diamond複数モデル・固定知識検索比較基盤](reports/AI/gpqa-diamond-multi-model-knowledge-retrieval-design.md) | API経由の複数モデル比較と、教科書由来の固定knowledge prompt／版固定retrievalによる性能変化を分離測定するための、実装前ソフトウェア設計書です。 |
 | [モデル切り替えによるアルゴリズム性能改善](reports/AI/gpt-5.6-model-switching-for-algorithm-optimization.md) | GPT-5.6 Sol／Terra／Lunaとgpt-oss-120bを、統制・実装・大量実行・候補探索へ分担させるworkflow、評価契約、昇格条件を提案しています。 |
 | [AGENTS.mdの開発原則](reports/AI/agents-md-development-principles.md) | AGENTS.mdの校正版と、単純な実装、段階的な成長、責務分離、依存関係の活用、長期的な設計という原則を日本語で解説しています。 |
 | [科学RAG向け知識データベース](reports/AI/rag-scientific-knowledge-databases.md) | 化学・生物・物理の公開データベースを、RAGでの採用証拠、API・一括取得、license、版固定、provenance、検索方式との適合性から比較しています。 |
