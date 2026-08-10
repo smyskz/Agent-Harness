@@ -1,13 +1,15 @@
 # AI Agent command索引
 
-`commands/`には、利用者が内容を確認して明示的に実行するAI Agent向けcommandを置く。
-各commandはrepository rootの[`AGENTS.md`](../AGENTS.md)に従い、既存変更、Git境界、
-承認条件を確認してから使用する。
+`commands/`には、利用者が内容を確認して明示的に実行するAI Agent向けCommandまたは
+Skillを置く。各Command／Skillはrepository rootの[`AGENTS.md`](../AGENTS.md)と
+[`AGENTS-project.md`](../AGENTS-project.md)に従い、既存変更、Git境界、承認条件を確認して
+から使用する。
 
 ## Command一覧
 
 | File | Status | 対象と動作 |
 |---|---|---|
+| [`initialize-project-agent-rules.md`](initialize-project-agent-rules.md) | original | repositoryの実態を調査し、共通`AGENTS.md`を複製せずproject固有の`AGENTS-project.md`を生成・統合する明示実行型Command |
 | [`review-architecture-baseline.md`](review-architecture-baseline.md) | original | `arch/`正本を整合性監査し、推奨案と選択肢を1問ずつ確認して更新し、最後にbaseline承認を求める |
 | [`archive-old-ai-reports.md`](archive-old-ai-reports.md) | original | 締切月より前の報告書を`reports/AI/YYYY-MM/`へ整理する月単位の原本 |
 | [`archive-old-ai-reports-update.md`](archive-old-ai-reports-update.md) | unverified update candidate | 締切日以前の報告書を`reports/AI/YYYY/MM/DD/`へ整理する日単位の改善候補 |

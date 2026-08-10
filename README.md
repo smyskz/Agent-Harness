@@ -8,8 +8,9 @@
 
 | directory | 用途 | ルートGitでの扱い |
 |---|---|---|
+| [`AGENTS.md`](AGENTS.md)、[`AGENTS-project.md`](AGENTS-project.md) | projectをまたぐAI Agent共通ruleと、このrepository固有のrule | **管理対象**。memory・報告書・Skill／Command改善は`AGENTS.md`、project構成・正本・検証は`AGENTS-project.md`を正本とする |
 | [`arch/`](arch/README.md) | 人間と生成AIが共有する、要求、開発計画、設計、ADR、テスト、traceabilityなどのソフトウェア開発文書 | **管理対象**。現在有効なsoftware要求・設計の正本 |
-| `commands/` | 利用者が明示実行するAI Agent向けcommand | **管理対象**。原本と`-update`候補を区別し、通常のGit review対象とする |
+| [`commands/`](commands/README.md) | 利用者が明示実行するAI Agent向けCommand／Skill | **管理対象**。原本と`-update`候補を区別し、通常のGit review対象とする |
 | `reports/AI/` | 調査結果をまとめた日本語のMarkdown報告書と付随SVG | **管理対象**。新規報告書の追加・削除・改名時はこのREADME索引も更新する |
 | `data/` | 実験評価に使うデータ | **すべて管理対象外**。file種別や内容を問わず`data/`以下をルートGitへ追加せず、`.gitignore`の例外も設けない |
 | `docs/` | 論文などのlocal参考資料。paperは`docs/paper/`へ置く | **管理対象外**。`.gitignore`で除外する |
@@ -17,8 +18,10 @@
 | `continue/`、`codex/`、`claude-code/`、`cline/`、`opencode/` | 調査時に参照する各製品のlocal clone | **ルートGitでは管理対象外**。各directoryは独立したGit repository |
 
 「管理対象」は自動的に追跡済みになるという意味ではありません。新規fileはstageして
-commitした時点で追跡されます。「管理対象外」はルート`.gitignore`により除外されます。
-独立Git repositoryでの変更やcommitは、ルートGitの履歴には含まれません。
+commitした時点で追跡されます。「管理対象外」または「管理対象外とする方針」のpathは
+原則としてルート`.gitignore`で除外します。表に明記した既存のtracked例外は、別taskで
+解消されるまで実態として区別します。独立Git repositoryでの変更やcommitは、ルートGitの
+履歴には含まれません。
 
 各報告書には調査日、対象バージョンまたはコミット、根拠、確認できた範囲と制約を記載しています。製品仕様や評価は調査時点のスナップショットであり、最新状態とは異なる場合があります。
 
