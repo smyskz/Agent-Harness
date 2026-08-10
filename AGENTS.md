@@ -174,7 +174,7 @@ action itemには、完了条件が明確で、1人または1 agentが担当で�
 name: <filenameと一致するkebab-case>
 description: <内容と適用条件を表す1行>
 metadata:
-  type: procedure | decision | lesson | observation
+  type: index | procedure | decision | lesson | observation
   status: active | superseded
   updated: YYYY-MM-DD
   sources:
@@ -185,22 +185,74 @@ metadata:
 ```
 
 directory、filename、`description`、Markdown headingを1つのtaxonomyとして扱う。
+`metadata.type: index`はnavigation専用noteに使用し、事実の根拠を持たない場合は
+`metadata.sources`を省略できる。それ以外のtypeではsourcesを記載する。
 
 - 同じ親のentryは、名前と説明だけで区別でき、互いに関連していること。
 - 親は子の範囲を覆い、子は親より具体的で、探索時に見落としを生まないこと。
 - 関連する内容は近くに置き、無関係な内容は分けること。
 - 階層は検索を速くする場合だけ追加し、経路を増やすだけの層を作らないこと。
 
+### Knowledge graphとしての構成
+
+`memory/`を単なるMarkdownの集合ではなく、再利用可能な知識をnode、意味のある
+Markdown linkをedgeとするknowledge graphとして管理する。この構造の意図は、
+関連知識、前提、変更経緯、適用条件を、会話履歴や全noteを再読せずに辿れるように
+することである。graphの接続数は正しさや重要度の根拠ではなく、navigationにだけ使う。
+
+- `memory/index.md`を全体のMap of Contentとして用意し、`metadata.type: index`とする。
+- indexにはactiveなtopicを分類し、各noteの名称、1行の説明、Markdown linkを置く。
+  詳細な知識を複製せず、個別noteを正本とする。
+- root indexだけではtopicを見つけにくくなった場合だけtopic別indexを追加する。
+  directoryやindexの階層を増やすこと自体を目的にしない。
+- activeなnoteは、`memory/index.md`から直接、またはほかのactive noteを経由して
+  到達可能にする。
+- `[[Wiki Link]]`を必須にせず、各AI Agentと一般的なMarkdown readerが
+  解釈できる`[label](relative-path.md)`形式を使う。link targetはlink元noteからの
+  相対pathとする。
+- backlink一覧を本文へ複製しない。indexからの入口と、判断に役立つ明示的な
+   forward linkだけを保守する。
+
+関連するnoteがある場合は、本文末尾に`関連ノート`sectionを設け、現在のnoteから
+link先へ向かう関係を次のtypeで記載する。以下のfilenameは形式を示すplaceholderであり、
+実際のnoteでは実在するtargetへ置き換える。
+
+```markdown
+## 関連ノート
+
+- `depends-on`: [前提となる知識](prerequisite-note.md)
+- `extends`: [発展元の知識](base-note.md)
+- `supersedes`: [置き換えた旧知識](old-note.md)
+- `superseded-by`: [現在有効な置換先](replacement-note.md)
+- `conflicts-with`: [条件によって競合する知識](alternative-note.md)
+- `applies-to`: [適用対象または利用手順](procedure-note.md)
+- `related`: [補助的に関連する知識](related-note.md)
+```
+
+- `depends-on`は現在のnoteが理解または適用の前提として依存する知識を示す。
+- `extends`は現在のnoteが発展させた元の知識を示す。
+- `supersedes`は現在のnoteが置き換えた旧知識を示す。
+- `superseded-by`はsuperseded noteから現在有効な置換先を示す。
+- `conflicts-with`は条件によって同時に適用できない知識を示す。
+- `applies-to`は現在の知識を利用する対象、procedure、decisionを示す。
+- `related`は上記に分類できないが併読する価値がある知識に限定する。
+
+単語の一致、同じtaskで作成したこと、弱い連想だけでedgeを追加しない。自動的な
+相互linkも作らず、逆方向にも意味がある場合だけ別のrelationを記載する。
+
 作業時は次の順序で記憶を扱う。
 
-1. 作業前にtreeとfrontmatterを一度surveyし、taskの対象、操作、条件、同義語を
-   `rg`で探す。全entryを無条件に読み込まず、関連するentryだけを読む。
-2. 作業後にsuccess、failure、partialを判定し、結果の理由と再利用価値を分析する。
-3. 生の会話やtrajectoryを保存せず、条件、判断理由、検証済み手順、失敗点を
+1. 作業前に、存在する場合は`memory/index.md`を読み、treeとfrontmatterを一度surveyして、
+   taskの対象、操作、条件、同義語、relation typeを`rg`で探す。
+2. 最も関連するactive noteを読み、必要な場合だけlinkを1～2段辿る。superseded noteに
+   到達した場合は置換先を確認する。全entryやgraph全体を無条件に読み込まない。
+3. 作業後にsuccess、failure、partialを判定し、結果の理由と再利用価値を分析する。
+4. 生の会話やtrajectoryを保存せず、条件、判断理由、検証済み手順、失敗点を
    簡潔で自己完結した記述へ蒸留する。
-4. 既存entryを先に探し、同じ知識は新規作成せず、既存entryへ統合する。
-5. 追加後に重複、矛盾、古い説明、散在、壊れたcross-referenceを直す。
-6. 再利用できる新しい知識がなければ、memoryを変更しない。
+5. 既存entryを先に探し、同じ知識は新規作成せず、既存entryへ統合する。新規noteは
+   indexまたは既存noteからlinkし、必要なrelationを追加する。
+6. 追加後に重複、矛盾、古い説明、散在、壊れたlink、孤立したactive noteを直す。
+7. 再利用できる新しい知識がなければ、memoryを変更しない。
 
 記憶の書き込みには次の規則を適用する。
 
@@ -212,11 +264,23 @@ directory、filename、`description`、Markdown headingを1つのtaxonomyとし�
   日付付きで残す。古い内容を現在の事実として並存させない。
 - 出典は該当する記述の近くにも示す。記憶の構造自体を根拠とせず、変化し得る事実は
   利用前に一次情報や現在のrepositoryで再検証する。
-- 同じ内容を複製せず、正本を1か所に置き、参照は`memory/...`の完全な相対pathで
-  記述する。rename、move、delete時は参照元を検索して同時に更新する。
+- 同じ内容を複製せず、正本を1か所に置く。本文中でpath自体を示す場合は
+  repository-relativeな`memory/...`を使い、knowledge graphのedgeはlink元からの
+  相対Markdown linkを使う。rename、move、delete時は参照元を検索して同時に更新する。
 - 原則として既存entryをin-placeで育てる。全体の再編や一括要約では事実を落とさず、
   説明が1行で表せない、または1ファイルで一貫して読めない場合にsplitする。
 - secret、credential、個人情報、一時的な進捗、巨大なlog、未検証の推測を保存しない。
+
+memoryを変更した場合は、次を検証する。
+
+- 追加または変更したMarkdown linkのtargetとanchorが実在する。
+- active noteが`memory/index.md`から直接またはほかのactive noteを経由して到達できる。
+- 自己link、重複edge、意味のない相互linkがない。
+- superseded noteの`superseded-by`とactiveな置換先の`supersedes`が対応し、置換関係が
+  循環していない。
+- rename、move、delete前のpathと壊れたreferenceが残っていない。
+- index、frontmatter、heading、description、statusに矛盾がなく、indexへ詳細な知識を
+  複製していない。
 
 ## 調査と根拠
 
