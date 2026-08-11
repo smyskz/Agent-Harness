@@ -10,6 +10,7 @@
 |---|---|---|
 | [`AGENTS.md`](AGENTS.md)、[`AGENTS-project.md`](AGENTS-project.md) | projectをまたぐAI Agent共通ruleと、このrepository固有のrule | **管理対象**。memory・報告書・Skill／Command改善は`AGENTS.md`、project構成・正本・検証は`AGENTS-project.md`を正本とする |
 | [`arch/`](arch/README.md) | 人間と生成AIが共有する、要求、開発計画、設計、ADR、テスト、traceabilityなどのソフトウェア開発文書 | **管理対象**。現在有効なsoftware要求・設計の正本 |
+| [`skills/`](skills/diagram-design.md) | AI Agentが依頼内容に応じて利用するSkill | **管理対象**。新規Skillは通常名、既存Skillの改善候補は`-update`名で管理する |
 | [`commands/`](commands/README.md) | 利用者が明示実行するAI Agent向けCommand／Skill | **管理対象**。原本と`-update`候補を区別し、通常のGit review対象とする |
 | `reports/AI/` | 調査結果をまとめた日本語のMarkdown報告書と付随SVG | **管理対象**。新規報告書の追加・削除・改名時はこのREADME索引も更新する |
 | `data/` | 実験評価に使うデータ | **すべて管理対象外**。file種別や内容を問わず`data/`以下をルートGitへ追加せず、`.gitignore`の例外も設けない |

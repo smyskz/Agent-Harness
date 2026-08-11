@@ -11,6 +11,7 @@ Skillを置く。各Command／Skillはrepository rootの[`AGENTS.md`](../AGENTS.
 |---|---|---|
 | [`initialize-project-agent-rules.md`](initialize-project-agent-rules.md) | original | repositoryの実態を調査し、共通`AGENTS.md`を複製せずproject固有の`AGENTS-project.md`を生成・統合する明示実行型Command |
 | [`review-architecture-baseline.md`](review-architecture-baseline.md) | original | `arch/`正本を整合性監査し、推奨案と選択肢を1問ずつ確認して更新し、最後にbaseline承認を求める |
+| [`map-repository-architecture.md`](map-repository-architecture.md) | original | 指定repositoryの全体architectureを静的に調査し、同じmodelから単一HTMLとJSONを生成・相互検証する明示実行型Skill |
 | [`archive-old-ai-reports.md`](archive-old-ai-reports.md) | original | 締切月より前の報告書を`reports/AI/YYYY-MM/`へ整理する月単位の原本 |
 | [`archive-old-ai-reports-update.md`](archive-old-ai-reports-update.md) | unverified update candidate | 締切日以前の報告書を`reports/AI/YYYY/MM/DD/`へ整理する日単位の改善候補 |
 

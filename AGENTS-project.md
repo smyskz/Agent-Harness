@@ -28,6 +28,7 @@ GPQA Diamond BM25章検索knowledge prompt評価基盤のsource、test、開発�
 - `src/gpqa_eval/`: GPQA評価基盤のPython 3.12 package。
 - `tests/`: `src/gpqa_eval/`に対応するtest suite。
 - `scripts/`: setupなど、projectで共有する補助script。
+- `skills/`: Git管理する、AI Agentが依頼内容に応じて利用するSkill。
 - `commands/`: Git管理する、利用者が明示実行するAI Agent向けSkill／Command。
 - `reports/AI/`: Git管理する日本語の調査・活動報告と付随SVG。報告書索引は
   `README.md`を正本とする。
