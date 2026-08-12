@@ -8,7 +8,7 @@
 
 | directory | 用途 | ルートGitでの扱い |
 |---|---|---|
-| [`AGENTS.md`](AGENTS.md)、[`AGENTS-project.md`](AGENTS-project.md) | projectをまたぐAI Agent共通ruleと、このrepository固有のrule | **管理対象**。memory・報告書・Skill／Command改善は`AGENTS.md`、project構成・正本・検証は`AGENTS-project.md`を正本とする |
+| [`AGENTS.md`](AGENTS.md)、[プロジェクトrootの`AGENTS.md`](AGENTS-project.md) | projectをまたぐAI Agent共通ruleと、このrepository固有のrule | **管理対象**。memory・報告書・Skill／Command改善は共通`AGENTS.md`、project構成・正本・検証はプロジェクトrootの`AGENTS.md`を正本とする。後者は現行ファイル名`AGENTS-project.md`を維持する |
 | [`arch/`](arch/README.md) | 人間と生成AIが共有する、要求、開発計画、設計、ADR、テスト、traceabilityなどのソフトウェア開発文書 | **管理対象**。現在有効なsoftware要求・設計の正本 |
 | [`skills/`](skills/diagram-design.md) | AI Agentが依頼内容に応じて利用するSkill | **管理対象**。新規Skillは通常名、既存Skillの改善候補は`-update`名で管理する |
 | [`commands/`](commands/README.md) | 利用者が明示実行するAI Agent向けCommand／Skill | **管理対象**。原本と`-update`候補を区別し、通常のGit review対象とする |

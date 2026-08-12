@@ -2,14 +2,15 @@
 
 ## 適用範囲と共通ルール
 
-このファイルは、このrepository固有の目的、構成、正本、開発手順、Git管理境界を定め、
-repository全体に適用する。作業前に共通ルールの[`AGENTS.md`](AGENTS.md)も全文読み、
+このファイルは、現行ファイル名`AGENTS-project.md`を維持しながら、このrepositoryにおける
+プロジェクトrootの`AGENTS.md`の役割を担う。このrepository固有の目的、構成、正本、開発手順、
+Git管理境界を定め、repository全体に適用する。作業前に共通ルールの[`AGENTS.md`](AGENTS.md)も全文読み、
 AI Agentの記憶、報告書、Skill／Command改善、調査、安全性、Gitに関する共通ルールを
 併せて適用する。
 
 より深いdirectoryに`AGENTS.md`またはtool固有の指示fileがある場合は、その範囲では
-より近い指示を優先する。project固有の事実はこのfile、projectをまたぐ運用規則は
-`AGENTS.md`を正本とし、同じ規則を両方へ複製しない。
+より近い指示を優先する。project固有の事実はプロジェクトrootの`AGENTS.md`であるこのfile、
+projectをまたぐ運用規則は共通`AGENTS.md`を正本とし、同じ規則を両方へ複製しない。
 
 ## プロジェクトの目的
 
@@ -21,7 +22,8 @@ GPQA Diamond BM25章検索knowledge prompt評価基盤のsource、test、開発�
 ## リポジトリ構成とGit管理境界
 
 - `AGENTS.md`: projectをまたぐAI Agent共通ルール。
-- `AGENTS-project.md`: このrepository固有のprojectルール。
+- `AGENTS-project.md`: 現行ファイル名を維持しつつ、プロジェクトrootの`AGENTS.md`として
+  このrepository固有のprojectルールを保持する。
 - `README.md`: repositoryの概要、directory構成、報告書索引、開発環境の入口。
 - `arch/`: Git管理するsoftware開発文書の正本。要求、設計、ADR、test方針、
   traceability、開発計画を置く。

@@ -1,15 +1,16 @@
 # AI Agent command索引
 
 `commands/`には、利用者が内容を確認して明示的に実行するAI Agent向けCommandまたは
-Skillを置く。各Command／Skillはrepository rootの[`AGENTS.md`](../AGENTS.md)と
-[`AGENTS-project.md`](../AGENTS-project.md)に従い、既存変更、Git境界、承認条件を確認して
-から使用する。
+Skillを置く。各Command／Skillはrepository rootの共通[`AGENTS.md`](../AGENTS.md)と
+[プロジェクトrootの`AGENTS.md`](../AGENTS-project.md)に従い、既存変更、Git境界、承認条件を
+確認してから使用する。このrepositoryでは、後者の現行ファイル名を`AGENTS-project.md`のまま
+維持する。
 
 ## Command一覧
 
 | File | Status | 対象と動作 |
 |---|---|---|
-| [`initialize-project-agent-rules.md`](initialize-project-agent-rules.md) | original | repositoryの実態を調査し、共通`AGENTS.md`を複製せずproject固有の`AGENTS-project.md`を生成・統合する明示実行型Command |
+| [`initialize-project-agent-rules.md`](initialize-project-agent-rules.md) | original | repositoryの実態を調査し、共通`AGENTS.md`を複製せずプロジェクトrootの`AGENTS.md`を生成・統合する明示実行型Command |
 | [`review-architecture-baseline.md`](review-architecture-baseline.md) | original | `arch/`正本を整合性監査し、推奨案と選択肢を1問ずつ確認して更新し、最後にbaseline承認を求める |
 | [`map-repository-architecture.md`](map-repository-architecture.md) | original | 指定repositoryの全体architectureを静的に調査し、同じmodelから単一HTMLとJSONを生成・相互検証する明示実行型Skill |
 | [`archive-old-ai-reports.md`](archive-old-ai-reports.md) | original | 締切月より前の報告書を`reports/AI/YYYY-MM/`へ整理する月単位の原本 |

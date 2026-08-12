@@ -4,11 +4,11 @@
 
 このファイルは、プロジェクトをまたいでAI Agentへ適用する共通ルールを定める。
 プロジェクトの目的、repository構成、正本文書、build／test手順、Git管理境界などは、
-各repositoryのルート`AGENTS-project.md`を正本とする。共通ルールへ個別projectのpathや
+各repositoryのルートの`AGENTS.md`を正本とする。共通ルールへ個別projectのpathや
 一時的な状態を固定しない。
 
 指示が競合する場合は、systemおよび利用者の指示、対象に最も近いproject指示、
-rootの`AGENTS-project.md`、この共通ルールの順に優先する。ただし、より近い指示を
+rootの`AGENTS.md`、この共通ルールの順に優先する。ただし、より近い指示を
 理由に、利用者の未コミット変更の保護、credential保護、承認なしの外部公開禁止などの
 安全条件を暗黙に弱めない。
 
@@ -19,15 +19,15 @@ rootの`AGENTS-project.md`、この共通ルールの順に優先する。ただ
 - 特定toolの専用command、agent名、tool名を必須手順にしない。必要な場合は目的も
   併記し、ほかのtoolで代替できるようにする。
 - OpenCodeとCodexはrootの`AGENTS.md`を共通指示として利用できる。作業前に、このfileが
-  指定する`AGENTS-project.md`も読む。
+  指定する`AGENTS.md`も読む。
 - Claude Codeでも同じ指示を使う場合は、rootの`CLAUDE.md`から`AGENTS.md`をimportする。
-  `AGENTS-project.md`はこの共通ルールから参照し、内容を複製して別の正本を作らない。
+  `AGENTS.md`はこの共通ルールから参照し、内容を複製して別の正本を作らない。
 - 個人設定を、repositoryの全員に必要なproject指示として書かない。
 
 ## 共通の作業開始手順
 
 1. 現在地、Git root、現在branch、worktreeの状態、対象に近い指示fileを確認する。
-2. `AGENTS-project.md`を読み、目的、repository構成、正本、Git管理境界、公式な
+2. 個別projectの`AGENTS.md`を読み、目的、repository構成、正本、Git管理境界、公式な
    format／lint／test手順を確認する。
 3. 外部検索や新規取得の前に、local clone、既存資料、既存報告書に必要な根拠が
    ないか確認する。
@@ -45,9 +45,9 @@ management、必要な記憶を探すsearchを概念上分離する。同じagen
 検索中は原則read-onlyとし、作業後に管理する。作業完了前に更新要否を必ず判定し、
 再利用できる新しい知識は完了報告前に`memory/`へ統合する。
 
-`memory/`は`AGENTS-project.md`でGit管理境界を定める。記憶は必要に応じて成長させ、
-最初から過剰なdirectory構成を作らない。各Markdownは1つの再利用可能なtopicに集中し、
-次のfrontmatterを先頭に置く。
+`memory/`は各プロジェクトの`AGENTS.md`でGit管理境界を定める。記憶は必要に応じて
+成長させ、 最初から過剰なdirectory構成を作らない。各Markdownは1つの再利用可能な
+topicに集中し、 次のfrontmatterを先頭に置く。
 
 ```yaml
 ---
@@ -186,7 +186,7 @@ memoryを変更した場合は、次を検証する。
 - 推奨と実際の採用事例を分ける。技術的に適していることだけで採用実績を断定しない。
 - 調査依頼では会話上の要約だけで終えず、指定されたMarkdown成果物を作成してから
   完了とする。
-- 報告書を追加、削除、改名した場合は、`AGENTS-project.md`が定める報告書索引とlinkを
+- 報告書を追加、削除、改名した場合は、`AGENTS.md`が定める報告書索引とlinkを
   更新する。
 
 ### Milestone完了報告
@@ -243,7 +243,7 @@ rawな会話、chain-of-thought、巨大なlogを転記せず、第三者が完�
 `skill/`、`skills/`、`command/`、`commands/`という名前のdirectory以下にある既存の
 Markdownを改善する場合は、配布元の`docs/paper/SKILLOPT-2605.23904v2.pdf`にある
 SkillOptを参考に、原本と改善候補を分離する。この規則は参照用clone内の同名directoryに
-適用せず、参照用cloneは`AGENTS-project.md`に従って扱う。
+適用せず、参照用cloneは`AGENTS.md`に従って扱う。
 
 - basenameが`-update`で終わらない既存文書を原本とし、直接変更しない。`hoge.md`の
   改善案は同じdirectoryの`hoge-update.md`として作成する。
@@ -283,8 +283,8 @@ SkillOptを参考に、原本と改善候補を分離する。この規則は参
 - `git diff --check`が空白errorを報告しない。
 - 追加・変更したMarkdownの相対linkが実在する。
 - 日付、version、commit、製品名、path、commandが根拠と一致する。
-- codeや設定を変更した場合は、`AGENTS-project.md`が定めるformat、lint、testを実行する。
-- project固有の正本、索引、Git管理境界、完了条件は`AGENTS-project.md`の検証項目に従う。
+- codeや設定を変更した場合は、`AGENTS.md`が定めるformat、lint、testを実行する。
+- project固有の正本、索引、Git管理境界、完了条件は`AGENTS.md`の検証項目に従う。
 - 検証できなかった項目は、未実施の理由とともに報告する。
 
 ## Gitと完了条件
